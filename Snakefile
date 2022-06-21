@@ -16,6 +16,8 @@ rule get_MultiAssayExp:
         S3.remote(prefix + "processed/cased_sequenced.csv"),
         S3.remote(prefix + "processed/CLIN.csv"),
         S3.remote(prefix + "processed/EXPR.csv")
+    resources:
+        mem_mb=1000
     shell:
         """
         Rscript -e \
@@ -37,6 +39,8 @@ rule format_data:
         S3.remote(prefix + "download/mel_puch_exp_data.csv"),
         S3.remote(prefix + "download/mel_puch_survival_data.csv"),
         S3.remote(prefix + "download/mel_puch_clin_data.csv")
+    resources:
+        mem_mb=1000
     shell:
         """
         Rscript scripts/Format_Data.R \
@@ -49,6 +53,8 @@ rule download_data:
         S3.remote(prefix + "download/mel_puch_exp_data.csv"),
         S3.remote(prefix + "download/mel_puch_survival_data.csv"),
         S3.remote(prefix + "download/mel_puch_clin_data.csv")
+    resources:
+        mem_mb=1000
     shell:
         """
         wget {data_source}mel_puch_exp_data.csv -O {prefix}download/mel_puch_exp_data.csv
