@@ -7,7 +7,7 @@ S3 = S3RemoteProvider(
 )
 prefix = config["prefix"]
 filename = config["filename"]
-data_source  = "https://raw.githubusercontent.com/BHKLAB-Pachyderm/ICB_Puch-data/main/"
+data_source  = "https://raw.githubusercontent.com/xmuyulab/ims_gene_signature/main/data/"
 
 rule get_MultiAssayExp:
     output:
@@ -69,5 +69,5 @@ rule download_data:
         """
         wget {data_source}mel_puch_exp_data.csv -O {prefix}download/mel_puch_exp_data.csv
         wget {data_source}mel_puch_survival_data.csv -O {prefix}download/mel_puch_survival_data.csv
-        wget {data_source}mel_puch_clin_data.csv -O {prefix}download/mel_puch_clin_data.csv
+        wget {data_source}mel_puch_cli_data.csv -O {prefix}download/mel_puch_clin_data.csv
         """ 
