@@ -1,12 +1,16 @@
 library(stringr)
 library(data.table)
+library(tibble)
 
 args <- commandArgs(trailingOnly = TRUE)
 input_dir <- args[1]
 output_dir <- args[2]
+annot_dir <- args[3]
 
 source("https://raw.githubusercontent.com/BHKLAB-Pachyderm/ICB_Common/main/code/Get_Response.R")
 source("https://raw.githubusercontent.com/BHKLAB-Pachyderm/ICB_Common/main/code/format_clin_data.R")
+source("https://raw.githubusercontent.com/BHKLAB-Pachyderm/ICB_Common/main/code/annotate_tissue.R")
+source("https://raw.githubusercontent.com/BHKLAB-Pachyderm/ICB_Common/main/code/annotate_drug.R")
 
 #############################################################################
 #############################################################################
@@ -55,6 +59,12 @@ clin$rna = "tpm"
 clin = clin[ , c("patient" , "sex" , "age" , "primary" , "histo" , "stage" , "response.other.info" , "recist" , "response" , "drug_type" , "dna" , "rna" , "t.pfs" , "pfs" , "t.os" , "os" ) ]
 
 clin <- format_clin_data(clin_original, 'X', selected_cols, clin)
+
+# Tissue and drug annotation
+annotation_tissue <- read.csv(file=file.path(annot_dir, 'curation_tissue.csv'))
+clin <- annotate_tissue(clin=clin, study='Puch', annotation_tissue=annotation_tissue, check_histo=FALSE)
+
+clin <- add_column(clin, unique_drugid='', .after='unique_tissueid')
 
 #############################################################################
 #############################################################################
